@@ -1,80 +1,72 @@
- Dataset Analysis for TTS Training
+Datasets
+LJSpeech:
+Single female (US English), 24 hours clean studio audio — best for clear single-speaker TTS.
 
-Dataset Overview
+VCTK:
+109 UK English speakers, 44 hours — good for accent and multi-speaker TTS.
 
- LJSpeech
-Single female English speaker from the USA with approximately 24 hours of high-quality studio recordings.
-Contains clean reading of public domain texts with minimal background noise. Ideal for training single-speaker TTS models requiring clear American English pronunciation. 
+LibriTTS:
+2,456 speakers, 585 hours — large-scale, mixed quality, ideal for robust models.
 
-VCTK (CSTR VCTK Corpus)
-109 native English speakers from various regions of the UK, totaling around 44 hours of speech. 
-Each speaker reads ~400 sentences covering diverse accents and speaking styles. Perfect for multi-speaker TTS and accent modeling applications. 
+Hi-Fi Multi-Speaker:
+10 pro speakers, 292 hours — premium quality with emotional variation.
 
- LibriTTS
-Large-scale English corpus derived from LibriSpeech audiobooks with 2,456 speakers and over 585 hours of speech. 
-Contains both clean and noisy recordings with aligned transcripts. Suitable for training robust TTS models that handle varied recording conditions. 
+HUI German Corpus:
+German voices with perfect alignment — for German TTS training.
 
- Hi-Fi Multi-Speaker
-10 English speakers (5 male, 5 female) with 292 hours of high-quality studio recordings. Features professional voice talent reading diverse texts with emotional variation. 
-Used for premium quality multi-speaker TTS systems.
+Common Voice:
+9,000+ hours, 60+ languages — useful for multilingual and low-resource TTS.
 
-HUI-Audio-Corpus-German
-German language dataset with high-quality alignments between audio and text. Multiple speakers reading studio-recorded material. 
-Essential for training German TTS models with accurate phoneme-to-text alignment. 
+Voice Quality Factors
+Clarity:
+High SNR (>20dB) and 22kHz audio = clear speech.
 
- Common Voice
-Mozilla's crowdsourced multilingual dataset with 9,000+ hours across 60+ languages. 
-Contains diverse speakers, accents, and recording quality levels. Best for multilingual TTS and low-resource language modelling.
+Naturalness:
+Prosody (rhythm, pauses) affects how human-like speech sounds.
 
-Voice Quality Mapping
+Accent:
+Train with region-matched datasets (US/UK English, etc.).
 
- Clarity
-Signal-to-noise ratio (SNR) directly impacts clarity - datasets with SNR > 20dB produce crisp, understandable speech while noisy recordings (<10dB SNR) result in muffled output. 
-Higher sample rates (22kHz+) preserve high-frequency consonants better than 16kHz audio. Clear articulation in training data ensures precise phoneme production in synthesis. 
+Pitch & Timbre:
+Voice tone and quality come from speaker’s F0 range (male: 100–180Hz, female: 180–250Hz).
 
-Naturalness
-Prosody (rhythm, stress, intonation) from training data determines naturalness. Datasets with natural pauses, varied sentence timing, and breathing patterns produce more human-like timing.
-Monotone reading datasets result in robotic prosody lacking expressiveness. 
+Emotion:
+Expressive datasets improve emotional tone variety.
 
- Accent
-Speaker accents transfer directly to TTS output. VCTK's regional UK accents produce accented synthesis matching training speakers. 
-Mixed-accent datasets can learn accent blending or switching capabilities. Target accent must match application requirements.
+Dataset Selection Tips
+Match language, accent, and speaker style to your TTS goal.
 
- Pitch & Timbre
-Fundamental frequency (F0) range and spectral characteristics from training speakers define output pitch and voice timbre. 
-Female-dominated datasets produce higher pitch ranges (180-250Hz) while male datasets favor lower ranges (100-180Hz). 
-Timbre (brightness, nasality) inherits from source speakers' vocal tract characteristics.
+Use expressive data for emotional voices, neutral for assistants.
 
- Emotional Conveyance
-Expressive datasets containing varied emotional delivery (excited reading, questions, emphasis) enable emotion-aware synthesis. 
-Monotone audiobook datasets limit models to neutral delivery only. Datasets with pitch variation, energy modulation, and speaking rate changes support emotional prosody modeling. 
+Prefer studio-quality audio (>20dB SNR, 22kHz+).
 
- Dataset Selection Guidelines
+Use single-speaker for clarity or multi-speaker for diversity.
 
-Language & Accent : Select datasets matching target language and regional accent (US English vs Indian English vs British English).
-Speaker Demographics : Match gender, approximate age range, and speaking style (formal vs conversational) to desired voice profile.
-Emotional Requirements : Choose expressive datasets for emotional TTS; use neutral reading datasets for robotic assistants.
-Recording Quality : Studio-quality datasets (>20dB SNR, 22kHz+) for premium applications; noisy datasets for robust real-world synthesis.
-Speaker Count : Single-speaker for focused voice quality; multi-speaker for voice switching or diverse representation.
-Size Considerations : 10-25 hours minimum for good quality; 100+ hours for robust multi-speaker models.
+Collect 10–25+ hours for good results, 100+ hours for strong multi-speaker systems.
 
-Data Preparation Pipeline
+Data Preparation Steps
+Remove noisy/corrupt files.
 
-1. Quality Assessment : Remove corrupted files, excessive noise (>15dB background), misaligned transcripts
-2. Audio Preprocessing :
-   - Resample to target rate (16kHz or 22.05kHz)
-   - Normalize RMS loudness to -20dBFS
-   - Apply high-pass filter (>80Hz) for noise reduction
-   - Trim leading/trailing silence (< -40dB threshold)
-3.  Text Normalization : Convert numbers, dates, abbreviations to spoken form
-4. Forced Alignment : Map text phonemes to precise audio timestamps using Montreal Forced Aligner
-5. Segmentation : Split long recordings into 5-15 second utterances
-6. Feature Extraction : Compute mel-spectrograms (80 mel bins, 25ms window, 10ms hop)
-7. Validation Split : 90% train, 5% validation, 5% test ensuring speaker balance
+Resample (16–22kHz), normalize loudness (-20dBFS).
 
- Key Insights
+Trim silence, clean text, and convert numbers/dates.
 
-Dataset properties fundamentally shape TTS voice characteristics. 
-Clean, expressive single-speaker datasets like LJSpeech excel for focused high-quality voices.
-Multi-speaker diverse datasets like VCTK enable accent modeling but sacrifice individual voice quality.
-Proper preprocessing ensures consistent input quality across datasets. 
+Align text–audio using Montreal Forced Aligner.
+
+Segment into 5–15 sec clips.
+
+Extract mel-spectrograms (80 mel bins).
+
+Split: 90% train, 5% validation, 5% test.
+
+Key Takeaways
+Dataset = Voice Quality. Good data → natural TTS.
+
+LJSpeech: high-quality single voice.
+
+VCTK: diverse accent modeling.
+
+LibriTTS: robust, large training base.
+
+Preprocessing ensures consistent and clean results.
+
